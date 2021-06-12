@@ -35,9 +35,9 @@
 
                     <div class="flex items-center justify-end">
                         <div class="text-sm">
-                            <a href="#" class="font-medium text-grayDark-900 hover:text-grayDark-800">
+                            <inertia-link :href="route('forgot-password')" class="font-medium text-grayDark-900 hover:text-grayDark-800">
                                 Esqueceu sua senha?
-                            </a>
+                            </inertia-link>
                         </div>
                     </div>
 
@@ -47,16 +47,18 @@
                 </form>
             </div>
         </div>
+        <notification :toast="$page.props.flash"/>
     </div>
 </template>
 
 <script>
 import Logo from "../../components/Logo";
 import LoadingButton from '../../components/LoadingButton'
+import Notification from "../../components/Notification";
 
 export default {
     name: 'Auth.Login',
-    components: {Logo, LoadingButton},
+    components: {Notification, Logo, LoadingButton},
     data() {
         return {
             form: this.$inertia.form({
