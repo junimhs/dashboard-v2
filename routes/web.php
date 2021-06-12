@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\ForgotPasswordController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +19,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect('admin/home');
 });
+
+Route::get('/forgot-password', [ForgotPasswordController::class, 'forgotPassword'])->name('forgot-password');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'recoverPassword'])->name('forgot-password-recover');
 
 Route::prefix('admin')->middleware(['auth'])->group(function() {
     Route::get('home', [HomeController::class, 'index'])->name('admin.home');
