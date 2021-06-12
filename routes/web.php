@@ -16,3 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return \Inertia\Inertia::render('Home');
 });
+
+Route::prefix('admin')->middleware(['auth'])->group(function() {
+    Route::get('teste', function() {
+        dd('teste');
+    });
+});
