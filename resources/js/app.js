@@ -5,6 +5,8 @@ import { InertiaProgress } from '@inertiajs/progress'
 
 InertiaProgress.init()
 
+Vue.mixin({ methods: { route: window.route } })
+
 createInertiaApp({
     resolve: name => require(`./pages/${name}`),
     setup({ el, app, props }) {
