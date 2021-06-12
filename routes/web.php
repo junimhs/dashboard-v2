@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,11 +16,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return \Inertia\Inertia::render('Home');
+    return redirect('admin/home');
 });
 
 Route::prefix('admin')->middleware(['auth'])->group(function() {
-    Route::get('teste', function() {
-        dd('teste');
-    });
+    Route::get('home', [HomeController::class, 'index'])->name('admin.home');
+    Route::get('users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::get('users/create', [UserController::class, 'create'])->name('admin.users.create');
+    Route::post('users', [UserController::class, 'store'])->name('admin.users.store');
+    Route::get('users/{id}', [UserController::class, 'edit'])->name('admin.users.edit');
+    Route::put('users/{id}', [UserController::class, 'update'])->name('admin.users.update');
+    Route::delete('users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
 });
