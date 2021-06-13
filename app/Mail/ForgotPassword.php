@@ -28,7 +28,7 @@ class ForgotPassword extends Mailable
     public function build()
     {
         return $this->markdown('emails.forgotpassword')->subject('Recuperação de senha - ' . config('app.name'))->with([
-            'resetPasswordLink' => 'http://localhost/resetar-senha?token=' . $this->token
+            'resetPasswordLink' => 'http://localhost/reset-password?token=' . $this->token
         ]);;
     }
 }

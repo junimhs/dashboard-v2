@@ -49,4 +49,47 @@ class ForgotPasswordController extends Controller
 
         return redirect()->route('login')->with(['type' => 'success', 'message' => 'Recuperação de senha enviada com sucesso!']);
     }
+
+    public function resetPasswordView(Request $request)
+    {
+        if(!$request->has('token')) {
+            return redirect()->route('login')->with(['type' => 'error', 'message' => 'Necessario informar o token!']);
+        }
+
+        $token = $request->token;
+
+        $tokenIsExists = PasswordReset::where('token', $token)->first();
+
+        if(!$tokenIsExists) {
+            return redirect()->route('login')->with(['type' => 'error', 'message' => 'Token invalido!']);
+        }
+
+        return Inertia::render('auth/reset-password', [
+            'token' => $token
+        ]);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $this->validate($request, [
+            'token' => 'required',
+            'password' => 'required|min:5|confirmed'
+        ]);
+
+        $token = $request->token;
+
+        $passwordNotExpired = PasswordReset::where('token', $token)->where('expires_in', '>', Carbon::now()->toDateTimeLocalString())->first();
+
+        if(!$passwordNotExpired) {
+            PasswordReset::where('token', $token)->delete();
+            return redirect()->route('login')->with(['type' => 'error', 'message' => 'Token esta expirado!']);
+        }
+
+        User::where('email', $passwordNotExpired->email)->update([
+            'password' => bcrypt($request->password)
+        ]);
+
+        PasswordReset::where('token', $token)->delete();
+        return redirect()->route('login')->with(['type' => 'success', 'message' => 'Senha resetada com sucesso!']);
+    }
 }

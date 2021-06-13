@@ -57,7 +57,7 @@ import LoadingButton from '../../components/LoadingButton'
 import Notification from "../../components/Notification";
 
 export default {
-    name: 'Auth.Login',
+    name: 'Auth.login',
     components: {Notification, Logo, LoadingButton},
     data() {
         return {
