@@ -14,13 +14,32 @@
             <div class="max-w-7xl mx-auto pb-12 px-4 sm:px-6 lg:px-8">
                 <!-- Replace with your content -->
                 <div class="bg-white rounded-lg shadow px-4 py-2 sm:px-6">
-                    <div class="border-b border-gray-200 py-3">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900">
-                            Filtrar usuarios
-                        </h3>
-                        <p class="mt-1 text-sm text-gray-500">
-                            Preencha os campos abaixo para filtragem de usuarios
-                        </p>
+                    <div class="border-b border-gray-200 py-3 flex justify-between">
+                        <div>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                Filtrar usuarios
+                            </h3>
+                            <p class="mt-1 text-sm text-gray-500">
+                                Preencha os campos abaixo para filtragem de usuarios
+                            </p>
+                        </div>
+                        <div class="flex items-center">
+                            <!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
+                            <button @click="showTrashed" type="button"
+                                    class="bg-gray-200 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                    :class="{'bg-indigo-600': isTrashed}"
+                                    role="switch" aria-checked="false" aria-labelledby="annual-billing-label">
+                                <span class="sr-only">Use setting</span>
+                                <!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" -->
+                                <span aria-hidden="true"
+                                      class="translate-x-0 pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"
+                                      :class="{'translate-x-5': isTrashed}"
+                                ></span>
+                            </button>
+                            <span class="ml-3" id="annual-billing-label">
+                                <span class="text-sm font-medium text-gray-900">{{ isTrashed ? 'Usuarios excluidos' : 'Usuarios ativos' }}</span>
+                            </span>
+                        </div>
                     </div>
                     <div class="mt-4">
                         <div class="flex flex-col">
@@ -54,7 +73,8 @@
                         </div>
                     </div>
                     <div class="py-4 flex justify-end">
-                        <loading-button title="Filtrar usuario" type="button" icon="SearchIcon" @click="filterUser" :loading="loading"/>
+                        <loading-button title="Filtrar usuario" type="button" icon="SearchIcon" @click="filterUser"
+                                        :loading="loading"/>
 
                         <loading-button class="ml-2" title="Resetar filtro" icon="CloseIcon" @click="resetFilter"
                                         v-if="isFilter"/>
@@ -64,7 +84,8 @@
                     <div class="bg-white shadow overflow-hidden sm:rounded-md">
                         <ul class="divide-y divide-gray-200">
                             <li v-for="user in users.data" :key="user.id">
-                                <inertia-link :href="route('admin.users.edit', {'id': user.id})" class="block hover:bg-gray-50">
+                                <inertia-link :href="route('admin.users.edit', {'id': user.id})"
+                                              class="block hover:bg-gray-50">
                                     <div class="flex items-center px-4 py-4 sm:px-6">
                                         <div class="min-w-0 flex-1 flex items-center">
                                             <div class="flex-shrink-0">
@@ -133,10 +154,11 @@ export default {
             params: {
                 id: this.filters.id,
                 name: this.filters.name,
-                email: this.filters.email
+                email: this.filters.email,
+                trashed: this.filters.trashed
             },
             filterView: this.isFilter,
-            loading: false
+            loading: false,
         }
     },
     methods: {
@@ -159,11 +181,22 @@ export default {
             this.params.email = null;
 
             this.filterUser();
+        },
+        showTrashed() {
+            this.params.trashed = this.params.trashed == 'true' ? 'false' : 'true';
+            this.$inertia.get(this.route('admin.users.index'), this.params, {
+                replace: true,
+                preserveState: true,
+                preserveScroll: true,
+            });
         }
     },
     computed: {
         isFilter() {
             return this.params.email || this.params.id || this.params.name;
+        },
+        isTrashed() {
+            return this.params.trashed == 'true' ? true : false
         }
     }
 }

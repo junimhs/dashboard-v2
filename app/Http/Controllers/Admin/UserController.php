@@ -17,6 +17,10 @@ class UserController extends Controller
 
 
         if($request->query()) {
+            if($request->trashed == 'true') {
+                $query->onlyTrashed();
+            }
+
             if(!is_null($request->id)) {
                 $query->where('id', $request->id);
             }
@@ -53,7 +57,7 @@ class UserController extends Controller
     public function edit($id)
     {
         return Inertia::render('users/edit', [
-            'user' => User::findOrFail($id)
+            'user' => User::withTrashed()->findOrFail($id)
         ]);
     }
 
@@ -61,7 +65,7 @@ class UserController extends Controller
     {
         $validated = $request->validated();
         $validated['password'] = bcrypt($validated['password']);
-        $user = User::findOrFail($id);
+        $user = User::withTrashed()->findOrFail($id);
         $user->update($validated);
 
         return redirect()->route('admin.users.index')->with(['type' => 'success', 'message' => 'Usuario editado com sucesso!']);
@@ -69,17 +73,23 @@ class UserController extends Controller
 
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
+        $user = User::withTrashed()->findOrFail($id);
+
+        $msg = $user->deleted_at ? 'Usuario restaurado com sucesso!' : 'Usuario excluido com sucesso!';
 
         if ($user->id == auth()->user()->id) {
             auth()->logout();
             $user->delete();
+        }elseif (!!$user->deleted_at) {
+            $user->restore();
         }else {
             $user->delete();
         }
 
 
-        return redirect()->route('admin.users.index')->with(['type' => 'success', 'message' => 'Usuario excluido com sucesso!']);
+
+
+        return redirect()->route('admin.users.index')->with(['type' => 'success', 'message' => $msg]);
     }
 
 }
