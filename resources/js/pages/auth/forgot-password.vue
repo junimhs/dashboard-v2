@@ -42,7 +42,7 @@ import Logo from "../../components/Logo";
 import LoadingButton from '../../components/LoadingButton'
 
 export default {
-    name: "forgot-password",
+    name: "Auth.forgot-password",
     components: {
         Logo,
         LoadingButton

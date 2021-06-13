@@ -31,7 +31,7 @@ class UserController extends Controller
         }
 
         return Inertia::render('users/index',[
-            'users' => $query->paginate(5)->appends('name', request('name'))->appends('id', request('id'))->appends('email', request('email')),
+            'users' => $query->where('email', '!=', auth()->user()->email)->paginate(5)->appends('name', request('name'))->appends('id', request('id'))->appends('email', request('email')),
             'filters' => $request->query()
         ]);
     }
@@ -44,6 +44,7 @@ class UserController extends Controller
     public function store(UserCreateRequest $request)
     {
         $validated = $request->validated();
+        $validated['password'] = bcrypt($validated['password']);
         User::create($validated);
 
         return redirect()->route('admin.users.index')->with(['type' => 'success', 'message' => 'Usuario cadastrado com sucesso!']);
@@ -59,6 +60,7 @@ class UserController extends Controller
     public function update(UserUpdateRequest $request, $id)
     {
         $validated = $request->validated();
+        $validated['password'] = bcrypt($validated['password']);
         $user = User::findOrFail($id);
         $user->update($validated);
 
@@ -68,7 +70,14 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
-        $user->delete();
+
+        if ($user->id == auth()->user()->id) {
+            auth()->logout();
+            $user->delete();
+        }else {
+            $user->delete();
+        }
+
 
         return redirect()->route('admin.users.index')->with(['type' => 'success', 'message' => 'Usuario excluido com sucesso!']);
     }
