@@ -43,16 +43,16 @@
                     <div v-if="isManage" class="bg-white rounded-md shadow py-4 sm:px-6 mt-4 lg:col-span-3">
                         <div class="">
                             <h3 class="2xl:text-sm leading-6 font-bold text-gray-600">
-                                Excluir conta do usuario
+                                {{ user.deleted_at ? 'Restaurar conta' : 'Excluir conta' }}
                             </h3>
                             <div class="mt-2 max-w-xl text-sm text-gray-500">
                                 <p>
-                                    Voce tem certeza que deseja excluir a conta do usuario?
+                                    Voce tem certeza que deseja {{ user.deleted_at ? 'restaurar' : 'excluir' }} a conta do usuario?
                                 </p>
                             </div>
                             <div class="mt-5">
                                 <button @click="previewDelete" type="button" class="inline-flex items-center justify-center px-4 py-2 border border-transparent font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm">
-                                    Excluir conta
+                                    {{ user.deleted_at ? 'Restaurar conta' : 'Excluir conta' }}
                                 </button>
 
                             </div>
@@ -146,7 +146,7 @@ export default {
         },
         isSecret() {
             return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
-        }
+        },
     },
     methods: {
         editUser() {
