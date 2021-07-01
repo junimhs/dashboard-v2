@@ -62,16 +62,6 @@
                                     </button>
                                 </div>
 
-                                <!--
-                                  Dropdown menu, show/hide based on menu state.
-
-                                  Entering: "transition ease-out duration-100"
-                                    From: "transform opacity-0 scale-95"
-                                    To: "transform opacity-100 scale-100"
-                                  Leaving: "transition ease-in duration-75"
-                                    From: "transform opacity-100 scale-100"
-                                    To: "transform opacity-0 scale-95"
-                                -->
                                 <transition name="fade">
                                     <div v-if="showMenu"
                                          class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
@@ -79,7 +69,7 @@
                                          tabindex="-1">
                                         <div class="py-1" role="none">
                                             <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
-                                            <inertia-link :href="route('admin.users.edit', {'id': $page.props.user.id})" class="text-gray-700 group flex items-center px-4 py-2 text-sm"
+                                            <inertia-link :href="route('admin.profile.index')" class="text-gray-700 group flex items-center px-4 py-2 text-sm"
                                                role="menuitem" tabindex="-1" id="menu-item-0">
                                                 <!-- Heroicon name: solid/pencil-alt -->
                                                 <svg class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
