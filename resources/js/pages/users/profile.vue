@@ -139,7 +139,7 @@
                                                         </span>
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                    <button type="button" @click="destroyDevice(device.id)"
+                                                    <button type="button" @click="openModal(device.id)"
                                                             class="text-indigo-600 hover:text-indigo-900">Desconectar
                                                     </button>
                                                 </td>
@@ -187,7 +187,14 @@
                 </div>
 
                 <!-- Replace with your content -->
-
+                <modal
+                    :is-view="modalView"
+                    title="Deseja desconectar dispositivo"
+                    message="Ao excluir o dispositivo automaticamente ira deslogar no dispositivo desconectado!"
+                    button="Desconectar"
+                    @onCancel="closeModal"
+                    @onSuccess="destroyDevice"
+                />
             </div>
         </main>
     </base-layout>
@@ -198,6 +205,7 @@ import BaseLayout from "../../layouts/base-layout";
 import InertiaButton from "../../components/InertiaButton";
 import LoadingButton from "../../components/LoadingButton";
 import TextInput from "../../components/TextInput";
+import Modal from "../../components/Modal";
 
 export default {
     name: "Profile.edit",
@@ -205,7 +213,7 @@ export default {
         user: Object,
         devices: Object | Array
     },
-    components: {TextInput, LoadingButton, BaseLayout, InertiaButton},
+    components: {Modal, TextInput, LoadingButton, BaseLayout, InertiaButton},
     data() {
         return {
             form: this.$inertia.form({
@@ -218,7 +226,9 @@ export default {
             isDelete: false,
             isView: 'profile',
             isErrorSecret: '',
-            loading: false
+            loading: false,
+            modalView: false,
+            idDevice: ''
         }
     },
     computed: {
@@ -254,6 +264,10 @@ export default {
             this.isDelete = false;
             this.isView = 'devices'
         },
+        openModal(idDevice) {
+            this.modalView = true;
+            this.idDevice = idDevice
+        },
         deleteUser() {
             if (this.secret !== this.isSecret) {
                 this.isErrorSecret = 'Informe o codigo valido!'
@@ -269,8 +283,11 @@ export default {
                 }
             });
         },
-        destroyDevice(id) {
-            this.$inertia.delete(route('admin.device.destroy', {id: id}))
+        destroyDevice() {
+            this.$inertia.delete(route('admin.device.destroy', {id: this.idDevice}))
+        },
+        closeModal() {
+            this.modalView = false;
         }
     }
 }
