@@ -81,8 +81,8 @@
                 <!-- /End replace -->
             </card>
             <card>
-                <div class="bg-white rounded-lg shadow px-5 py-6 sm:px-6 mt-4">
-                    <div class="bg-white shadow overflow-hidden sm:rounded-md">
+                <div class="bg-white rounded-lg mt-4">
+                    <div class="bg-white overflow-hidden sm:rounded-md">
                         <ul class="divide-y divide-gray-200">
                             <li v-for="user in users.data" :key="user.id">
                                 <inertia-link :href="route('admin.users.edit', {'id': user.id})"
