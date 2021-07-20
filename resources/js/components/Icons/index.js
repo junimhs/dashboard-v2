@@ -6,5 +6,6 @@ import SearchIcon from './search'
 import CloseIcon from './close'
 import ArrowLeftIcon from './arrow-left'
 import LockIcon from './lock'
+import CashIcon from './cash'
 
-export { PlusIcon, MailIcon, KeyIcon, UserIcon, SearchIcon, CloseIcon, ArrowLeftIcon, LockIcon }
+export { PlusIcon, MailIcon, KeyIcon, UserIcon, SearchIcon, CloseIcon, ArrowLeftIcon, LockIcon, CashIcon }

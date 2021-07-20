@@ -5,7 +5,12 @@
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <component :is="icon" class="h-5 w-5 text-gray-400" :class="{ 'text-red-300': !!error }"/>
             </div>
-            <input :type="type" :name="name" :id="id"
+            <input v-if="isMoney" :type="type" :name="name" :id="id" v-money="money"
+                   class="focus:ring-gray-800 focus:border-gray-800 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                   :class="{'border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500': !!error}"
+                   :placeholder="placeholder" :value="value" @input="$emit('input', $event.target.value)">
+
+            <input v-else :type="type" :name="name" :id="id"
                    class="focus:ring-gray-800 focus:border-gray-800 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
                    :class="{'border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500': !!error}"
                    :placeholder="placeholder" :value="value" @input="$emit('input', $event.target.value)">
@@ -15,11 +20,8 @@
 </template>
 
 <script>
-import PlusIcon from '../Icons/plus'
-import MailIcon from '../Icons/mail'
-import KeyIcon from '../Icons/key'
-import UserIcon from '../Icons/user'
-import LockIcon from '../Icons/lock'
+import {VMoney} from 'v-money'
+import { PlusIcon, MailIcon, KeyIcon, UserIcon, SearchIcon, CloseIcon, LockIcon, ArrowLeftIcon, CashIcon } from '../Icons'
 export default {
     name: "TextInput",
     components: {
@@ -27,9 +29,12 @@ export default {
         MailIcon,
         KeyIcon,
         UserIcon,
-        LockIcon
+        LockIcon,
+        SearchIcon,
+        CloseIcon,
+        ArrowLeftIcon,
+        CashIcon
     },
-    emits: ['update:content'],
     props: {
         label: {
             type: String,
@@ -58,11 +63,26 @@ export default {
             required: true
         },
         value: String,
-        error: String
+        error: String,
+        isMoney: {
+            type: Boolean,
+            default: false
+        }
     },
+    data() {
+        return {
+            money: {
+                decimal: ',',
+                thousands: '.',
+                prefix: 'R$ ',
+                precision: 2,
+                masked: false
+            }
+        }
+    },
+    directives: {money: VMoney}
 }
 </script>
 
 <style scoped>
-
 </style>
