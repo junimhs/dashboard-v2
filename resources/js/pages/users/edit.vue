@@ -120,6 +120,7 @@ export default {
     name: "Users.edit",
     props: {
         user: Object,
+        filters: Array | Object
     },
     components: {TextInput, LoadingButton, BaseLayout, InertiaButton},
     data() {
@@ -147,6 +148,14 @@ export default {
         isSecret() {
             return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
         },
+    },
+    mounted() {
+        if(this.filters?.tab !== undefined && this.filters?.tab !== null) {
+            console.log(this.filters?.tab)
+            this.isView = this.filters?.tab
+        }else {
+            this.isView = 'profile'
+        }
     },
     methods: {
         editUser() {

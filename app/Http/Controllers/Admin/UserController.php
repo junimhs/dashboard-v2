@@ -58,10 +58,11 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')->with(['type' => 'success', 'message' => 'Usuario cadastrado com sucesso!']);
     }
 
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         return Inertia::render('users/edit', [
-            'user' => User::withTrashed()->findOrFail($id)
+            'user' => User::withTrashed()->findOrFail($id),
+            'filters' => $request->query()
         ]);
     }
 
