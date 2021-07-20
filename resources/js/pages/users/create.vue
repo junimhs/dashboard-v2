@@ -15,10 +15,10 @@
                 <!-- Replace with your content -->
                 <div class="bg-white rounded-lg shadow px-4 py-4 sm:px-6">
                     <form @submit.stop.prevent="registerUser">
-                        <text-input label="Nome" placeholder="Nome do usuario" name="name" icon="UserIcon" v-model:content="form.name" :error="form.errors.name"/>
-                        <text-input label="E-mail" placeholder="E-mail do usuario" name="email" icon="MailIcon" v-model:content="form.email" class="mt-4" :error="form.errors.email"/>
-                        <text-input label="Senha" type="password" placeholder="Senha do usuario" name="password" icon="LockIcon" v-model:content="form.password" class="mt-4" :error="form.errors.password"/>
-                        <text-input label="Confirmacao de senha" type="password" placeholder="Confirmacao da senha do usuario" name="password_confirmation" icon="LockIcon" v-model:content="form.password_confirmation" class="mt-4"/>
+                        <text-input label="Nome" placeholder="Nome do usuario" name="name" icon="UserIcon" v-model="form.name" :error="form.errors.name"/>
+                        <text-input label="E-mail" placeholder="E-mail do usuario" name="email" icon="MailIcon" v-model="form.email" class="mt-4" :error="form.errors.email"/>
+                        <text-input label="Senha" type="password" placeholder="Senha do usuario" name="password" icon="LockIcon" v-model="form.password" class="mt-4" :error="form.errors.password"/>
+                        <text-input label="Confirmacao de senha" type="password" placeholder="Confirmacao da senha do usuario" name="password_confirmation" icon="LockIcon" v-model="form.password_confirmation" class="mt-4"/>
                         <div class="py-4 flex justify-end">
                             <loading-button title="Cadastrar" icon="PlusIcon" type="submit" :loading="form.processing"/>
                         </div>
